@@ -19,3 +19,8 @@ CDBOperate* CDBOperate::getInstance(){
 
 	return instance;
 }
+
+void CDBOperate::execSQL(CString strSQL)
+{
+	OutputDebugString(L"SQL = " + strSQL);
+}
