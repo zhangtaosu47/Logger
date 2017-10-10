@@ -205,16 +205,16 @@ void CLoggerDlg::OnBnClickedBtQuery()
 
 	//combo
 	int nIndex;
-	CString str_name;
+	CString str_Name;
 	nIndex = m_ComboName.GetCurSel();
-	m_ComboName.GetLBText(nIndex,str_name);
-	OutputDebugString(str_name + "\n");
+	m_ComboName.GetLBText(nIndex,str_Name);
+	OutputDebugString(str_Name + "\n");
 
 	pLogDelete->SetDay1(str_Day1);
 	pLogDelete->SetDay2(str_Day2);
 	pLogDelete->SetTime1(str_Time1);
 	pLogDelete->SetTime2(str_Time2);
-	pLogDelete->SetName(str_name);
+	pLogDelete->SetName(str_Name);
 	pLogDelete->DoSomething();
 
 	delete pLogDelete;
