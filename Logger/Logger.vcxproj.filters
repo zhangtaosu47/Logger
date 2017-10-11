@@ -48,6 +48,9 @@
     <ClInclude Include="DBOperate.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="AdoSQL.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -66,6 +69,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DBOperate.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="AdoSQL.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

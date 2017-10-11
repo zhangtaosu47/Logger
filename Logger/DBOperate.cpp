@@ -3,6 +3,7 @@
 
 CDBOperate* CDBOperate::instance = NULL;
 
+
 CDBOperate::CDBOperate(void)
 {
 }
@@ -11,7 +12,8 @@ CDBOperate::~CDBOperate(void)
 {
 }
 
-CDBOperate* CDBOperate::getInstance(){
+CDBOperate* CDBOperate::getInstance()
+{
 	if(NULL == instance)
 	{
 		instance = new CDBOperate();
