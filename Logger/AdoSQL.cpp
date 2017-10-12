@@ -63,7 +63,7 @@ _RecordsetPtr CAdoSql::GetRecordSet(CString bstrSqlCmd)
 	//创建记录集指针对象实例
 	m_pRecordSet.CreateInstance(__uuidof(Recordset));
 	//打开记录集
-	m_pRecordSet->Open(m_sqlCmd, m_pConnection.GetInterfacePtr(), adOpenDynamic, adLockOptimistic, adCmdText);
+	m_pRecordSet->Open(m_sqlCmd, m_pConnection.GetInterfacePtr(), adOpenStatic, adLockOptimistic, adCmdText);
 	return m_pRecordSet;	
 }
 

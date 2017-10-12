@@ -5,6 +5,7 @@
 #pragma once
 #include "afxdtctl.h"
 #include "afxwin.h"
+#include "afxcmn.h"
 
 
 // CLoggerDlg ¶Ô»°¿ò
@@ -38,4 +39,5 @@ public:
 	CDateTimeCtrl m_DateTimeCtrl2;
 	CMonthCalCtrl m_MonthCalCtrl1;
 	CMonthCalCtrl m_MonthCalCtrl2;
+	CListCtrl m_ListCtrl;
 };

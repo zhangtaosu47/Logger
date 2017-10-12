@@ -65,6 +65,7 @@ void CLoggerDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_DATETIMEPICKER2, m_DateTimeCtrl2);
 	DDX_Control(pDX, IDC_MONTHCALENDAR1, m_MonthCalCtrl1);
 	DDX_Control(pDX, IDC_MONTHCALENDAR2, m_MonthCalCtrl2);
+	DDX_Control(pDX, IDC_LIST1, m_ListCtrl);
 }
 
 BEGIN_MESSAGE_MAP(CLoggerDlg, CDialogEx)
@@ -109,12 +110,18 @@ BOOL CLoggerDlg::OnInitDialog()
 	// TODO: 在此添加额外的初始化代码
 	//added by zh.t
 	m_ComboName.ResetContent();
-	m_ComboName.AddString(L"陈超");
-	m_ComboName.AddString(L"索炎");
-	m_ComboName.AddString(L"罗鹏");
-	m_ComboName.AddString(L"郎志楠");
-	m_ComboName.AddString(L"张施全");
-	m_ComboName.AddString(L"杨盛云");
+	m_ComboName.InsertString(0,L"空");
+	m_ComboName.InsertString(1,L"全部");
+	m_ComboName.InsertString(2,L"张施全");
+	m_ComboName.InsertString(3,L"黄勤智");
+	m_ComboName.InsertString(4,L"索炎");
+	m_ComboName.InsertString(5,L"陈超");
+	m_ComboName.InsertString(6,L"罗鹏");
+	m_ComboName.InsertString(7,L"郎志楠");
+	m_ComboName.InsertString(8,L"杨盛云");
+	m_ComboName.InsertString(9,L"张涛");
+	m_ComboName.InsertString(10,L"崔静涛");
+	m_ComboName.SetCurSel(0);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -216,6 +223,16 @@ void CLoggerDlg::OnBnClickedBtQuery()
 	pLogDelete->SetTime2(str_Time2);
 	pLogDelete->SetName(str_Name);
 	pLogDelete->DoSomething();
+	CString **p = pLogDelete->GetListItem();
+
+	for(UINT32 i=0;i<pLogDelete->GetRows();++i)
+	{
+		for(UINT32 j=0;j<pLogDelete->GetColums();++j)
+		{			
+			OutputDebugString(p[i][j] + L"--");
+		}
+		OutputDebugString(L"\n");
+	}
 
 	delete pLogDelete;
 	pLogDelete = NULL;

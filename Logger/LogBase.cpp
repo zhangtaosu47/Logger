@@ -35,3 +35,18 @@ void CLogBase::SetName(CString str)
 {
 	m_strName = str;
 }
+
+CString ** CLogBase::GetListItem()
+{
+	return m_strListItem;
+}
+
+UINT32 CLogBase::GetRows()
+{
+	return m_Rows;
+}
+
+UINT32 CLogBase::GetColums()
+{
+	return m_Colums;
+}

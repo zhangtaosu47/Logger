@@ -22,21 +22,28 @@ bool CLogDelete::DoSomething()
 
 	CString strSQL2 = L"SELECT * FROM lala";
 	_RecordsetPtr rs = db->GetRecordSet(strSQL2);
+	m_Rows = rs->GetRecordCount();
+	m_Colums = rs->GetFields()->GetCount();
 
+	m_strListItem = new CString *[rs->GetRecordCount()];	
+	int j = 0;
 	while(!rs->adoEOF)
 	{
+		m_strListItem[j] = new CString [rs->GetFields()->GetCount()];
 		for(int i=0;i<rs->GetFields()->GetCount();++i)
 		{			
 			_variant_t v = rs->GetFields()->GetItem((long)i)->Value;
 			CString str = (TCHAR*)(_bstr_t)v;
-			OutputDebugString(str + "  ");
+			m_strListItem[j][i] = str;
+//			OutputDebugString(str + "  ");
 		}
-		OutputDebugString(L"\n");
+//		OutputDebugString(L"\n");
+		j++;
 		rs->MoveNext();
 	}
 
-	strSQL2 = L"update lala set name = 'WAWA' where name = 'MOO'";
-	db->ExcuteCmd(strSQL2);
+	//strSQL2 = L"update lala set name = 'WAWA' where name = 'MOO'";
+	//db->ExcuteCmd(strSQL2);
 
 	return true;
 }
