@@ -50,3 +50,8 @@ UINT32 CLogBase::GetColums()
 {
 	return m_Colums;
 }
+
+vector < vector <CString> > CLogBase::GetVecList()
+{
+	return m_vecList;
+}

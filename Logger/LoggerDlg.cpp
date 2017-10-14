@@ -14,6 +14,8 @@
 #define new DEBUG_NEW
 #endif
 
+#include <vector>
+using namespace std;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -223,16 +225,36 @@ void CLoggerDlg::OnBnClickedBtQuery()
 	pLogDelete->SetTime2(str_Time2);
 	pLogDelete->SetName(str_Name);
 	pLogDelete->DoSomething();
-	CString **p = pLogDelete->GetListItem();
+	//CString **p = pLogDelete->GetListItem();
 
-	for(UINT32 i=0;i<pLogDelete->GetRows();++i)
+	//for(UINT32 i=0;i<pLogDelete->GetRows();++i)
+	//{
+	//	for(UINT32 j=0;j<pLogDelete->GetColums();++j)
+	//	{			
+	//		OutputDebugString(p[i][j] + L"--");
+	//	}
+	//	OutputDebugString(L"\n");
+	//}
+
+	vector < vector <CString> >::iterator it1;
+	vector <CString>::iterator it2;
+	vector < vector <CString> > vecList = pLogDelete->GetVecList();
+	for(it1=vecList.begin();it1!=vecList.end();++it1)
 	{
-		for(UINT32 j=0;j<pLogDelete->GetColums();++j)
-		{			
-			OutputDebugString(p[i][j] + L"--");
+		for(it2=it1->begin();it2!=it1->end();++it2)
+		{
+			OutputDebugString(*it2 + L" ");
 		}
 		OutputDebugString(L"\n");
 	}
+	/*for(UINT32 i=0;i<vecList.size();++i)
+	{
+	for(UINT32 j=0;j<vecList[i].size();++j)
+	{
+	OutputDebugString(vecList[i][j] + L"  ");
+	}
+	OutputDebugString(L"\n");
+	}*/
 
 	delete pLogDelete;
 	pLogDelete = NULL;

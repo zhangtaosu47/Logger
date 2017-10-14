@@ -26,6 +26,7 @@ bool CLogDelete::DoSomething()
 	m_Colums = rs->GetFields()->GetCount();
 
 	m_strListItem = new CString *[rs->GetRecordCount()];	
+	vector <CString> vecRow;
 	int j = 0;
 	while(!rs->adoEOF)
 	{
@@ -35,8 +36,11 @@ bool CLogDelete::DoSomething()
 			_variant_t v = rs->GetFields()->GetItem((long)i)->Value;
 			CString str = (TCHAR*)(_bstr_t)v;
 			m_strListItem[j][i] = str;
+			vecRow.push_back(str);
 //			OutputDebugString(str + "  ");
 		}
+		m_vecList.push_back(vecRow);
+		vecRow.clear();
 //		OutputDebugString(L"\n");
 		j++;
 		rs->MoveNext();
