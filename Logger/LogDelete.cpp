@@ -22,27 +22,25 @@ bool CLogDelete::DoSomething()
 
 	CString strSQL2 = L"SELECT * FROM lala";
 	_RecordsetPtr rs = db->GetRecordSet(strSQL2);
-	m_Rows = rs->GetRecordCount();
-	m_Colums = rs->GetFields()->GetCount();
 
-	m_strListItem = new CString *[rs->GetRecordCount()];	
+	for (int i=0;i<rs->GetFields()->GetCount();++i)
+	{		
+		CString strTemp;
+		strTemp.Format(L"%s",(LPCTSTR)rs->GetFields()->GetItem((long)i)->GetName());
+		m_vecColumn.push_back(strTemp);
+	}
+
 	vector <CString> vecRow;
-	int j = 0;
 	while(!rs->adoEOF)
-	{
-		m_strListItem[j] = new CString [rs->GetFields()->GetCount()];
+	{		
 		for(int i=0;i<rs->GetFields()->GetCount();++i)
 		{			
 			_variant_t v = rs->GetFields()->GetItem((long)i)->Value;
-			CString str = (TCHAR*)(_bstr_t)v;
-			m_strListItem[j][i] = str;
+			CString str = (TCHAR*)(_bstr_t)v;			
 			vecRow.push_back(str);
-//			OutputDebugString(str + "  ");
 		}
 		m_vecList.push_back(vecRow);
 		vecRow.clear();
-//		OutputDebugString(L"\n");
-		j++;
 		rs->MoveNext();
 	}
 

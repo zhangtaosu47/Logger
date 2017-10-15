@@ -7,6 +7,8 @@
 #include "afxwin.h"
 #include "afxcmn.h"
 
+#include <vector>
+using namespace std;
 
 // CLoggerDlg ¶Ô»°¿ò
 class CLoggerDlg : public CDialogEx
@@ -33,11 +35,16 @@ protected:
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
 public:
-	afx_msg void OnBnClickedBtQuery();	
+	afx_msg void OnBnClickedBtQuery();
 	CComboBox m_ComboName;
 	CDateTimeCtrl m_DateTimeCtrl1;
 	CDateTimeCtrl m_DateTimeCtrl2;
 	CMonthCalCtrl m_MonthCalCtrl1;
 	CMonthCalCtrl m_MonthCalCtrl2;
 	CListCtrl m_ListCtrl;
+
+private:
+	void InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn);
+public:
+	afx_msg void OnBnClickedRadio();
 };

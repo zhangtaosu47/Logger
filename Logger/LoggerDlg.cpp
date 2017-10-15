@@ -77,7 +77,6 @@ BEGIN_MESSAGE_MAP(CLoggerDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BT_QUERY, &CLoggerDlg::OnBnClickedBtQuery)
 END_MESSAGE_MAP()
 
-
 // CLoggerDlg 消息处理程序
 
 BOOL CLoggerDlg::OnInitDialog()
@@ -224,38 +223,59 @@ void CLoggerDlg::OnBnClickedBtQuery()
 	pLogDelete->SetTime1(str_Time1);
 	pLogDelete->SetTime2(str_Time2);
 	pLogDelete->SetName(str_Name);
-	pLogDelete->DoSomething();
-	//CString **p = pLogDelete->GetListItem();
-
-	//for(UINT32 i=0;i<pLogDelete->GetRows();++i)
-	//{
-	//	for(UINT32 j=0;j<pLogDelete->GetColums();++j)
-	//	{			
-	//		OutputDebugString(p[i][j] + L"--");
-	//	}
-	//	OutputDebugString(L"\n");
-	//}
+	pLogDelete->DoSomething();	
 
 	vector < vector <CString> >::iterator it1;
 	vector <CString>::iterator it2;
 	vector < vector <CString> > vecList = pLogDelete->GetVecList();
-	for(it1=vecList.begin();it1!=vecList.end();++it1)
+	/*for(it1=vecList.begin();it1!=vecList.end();++it1)
 	{
-		for(it2=it1->begin();it2!=it1->end();++it2)
-		{
-			OutputDebugString(*it2 + L" ");
-		}
-		OutputDebugString(L"\n");
-	}
-	/*for(UINT32 i=0;i<vecList.size();++i)
+	for(it2=it1->begin();it2!=it1->end();++it2)
 	{
-	for(UINT32 j=0;j<vecList[i].size();++j)
-	{
-	OutputDebugString(vecList[i][j] + L"  ");
+	OutputDebugString(*it2 + L" ");
 	}
 	OutputDebugString(L"\n");
 	}*/
 
+	vector <CString> vecColumn = pLogDelete->GetVecColumn();
+
+	InitListCtrl(vecList,vecColumn);
+
 	delete pLogDelete;
 	pLogDelete = NULL;
+}
+
+void CLoggerDlg::InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn)
+{
+	DWORD dwStyle = m_ListCtrl.GetExtendedStyle();     
+	dwStyle |= LVS_EX_FULLROWSELECT;
+	dwStyle |= LVS_EX_GRIDLINES;
+	m_ListCtrl.SetExtendedStyle(dwStyle);
+
+	for (UINT i=0;i<vecColumn.size();++i)
+	{
+		m_ListCtrl.InsertColumn(i,vecColumn[i],LVCFMT_LEFT, 60);
+	}
+
+	for (UINT i=0;i<vecList.size();++i)
+	{
+		for (UINT j=0;j<vecList[i].size();++j)
+		{
+			if(0 == j)
+			{
+				m_ListCtrl.InsertItem(i,vecList[i][j]);
+			}
+			else
+			{
+				m_ListCtrl.SetItemText(i,j,vecList[i][j]);
+			}
+		}
+	}
+}
+
+void CLoggerDlg::OnBnClickedRadio()
+{
+	CString str;
+//	str.Format(L"%d",m_rdDealWay.GetCheck());
+	OutputDebugString(str + L"\n");
 }
