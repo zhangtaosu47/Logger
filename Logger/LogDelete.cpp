@@ -24,7 +24,7 @@ bool CLogDelete::DoSomething()
 	_RecordsetPtr rs = db->GetRecordSet(strSQL2);
 
 	for (int i=0;i<rs->GetFields()->GetCount();++i)
-	{		
+	{
 		CString strTemp;
 		strTemp.Format(L"%s",(LPCTSTR)rs->GetFields()->GetItem((long)i)->GetName());
 		m_vecColumn.push_back(strTemp);

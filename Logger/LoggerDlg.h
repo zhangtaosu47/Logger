@@ -20,6 +20,9 @@ public:
 // 对话框数据
 	enum { IDD = IDD_LOGGER_DIALOG };
 
+// Radio的状态
+	enum RADIO_STATUS{RECORD_DELETE = 0,RECORD_RESPOND};
+
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
 
@@ -45,6 +48,10 @@ public:
 
 private:
 	void InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn);
+	RADIO_STATUS GetRadioStatus();
+	void SetOperation(RADIO_STATUS status);
 public:
 	afx_msg void OnBnClickedRadio();
+	afx_msg void OnBnClickedRadioDelete();
+	afx_msg void OnBnClickedRadioRespond();
 };

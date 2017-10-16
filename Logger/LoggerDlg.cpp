@@ -75,6 +75,8 @@ BEGIN_MESSAGE_MAP(CLoggerDlg, CDialogEx)
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
 	ON_BN_CLICKED(IDC_BT_QUERY, &CLoggerDlg::OnBnClickedBtQuery)
+	ON_BN_CLICKED(IDC_RADIO_DELETE, &CLoggerDlg::OnBnClickedRadioDelete)
+	ON_BN_CLICKED(IDC_RADIO_RESPOND, &CLoggerDlg::OnBnClickedRadioRespond)
 END_MESSAGE_MAP()
 
 // CLoggerDlg 消息处理程序
@@ -123,6 +125,10 @@ BOOL CLoggerDlg::OnInitDialog()
 	m_ComboName.InsertString(9,L"张涛");
 	m_ComboName.InsertString(10,L"崔静涛");
 	m_ComboName.SetCurSel(0);
+
+	//发送“删除”按钮按下的消息
+	PostMessage(WM_COMMAND, MAKEWPARAM(IDC_RADIO_DELETE, BN_CLICKED), NULL);  
+	((CButton *)GetDlgItem(IDC_RADIO_DELETE))->SetCheck(TRUE);
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -242,7 +248,7 @@ void CLoggerDlg::OnBnClickedBtQuery()
 	InitListCtrl(vecList,vecColumn);
 
 	delete pLogDelete;
-	pLogDelete = NULL;
+	pLogDelete = NULL;	
 }
 
 void CLoggerDlg::InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn)
@@ -273,9 +279,51 @@ void CLoggerDlg::InitListCtrl(vector < vector <CString> > vecList,vector <CStrin
 	}
 }
 
-void CLoggerDlg::OnBnClickedRadio()
+CLoggerDlg::RADIO_STATUS CLoggerDlg::GetRadioStatus()
 {
-	CString str;
-//	str.Format(L"%d",m_rdDealWay.GetCheck());
-	OutputDebugString(str + L"\n");
+	BOOL bRadio = FALSE;
+	bRadio = ((CButton *)GetDlgItem(IDC_RADIO_DELETE))->GetCheck();
+	if(TRUE == bRadio)
+	{
+		return RECORD_DELETE;
+	}
+
+	bRadio = ((CButton *)GetDlgItem(IDC_RADIO_RESPOND))->GetCheck();
+	if(TRUE == bRadio)
+	{
+		return RECORD_RESPOND;
+	}
+
+	return RECORD_DELETE;
+}
+
+void CLoggerDlg::SetOperation(RADIO_STATUS status)
+{
+	switch(status)
+	{
+		case RECORD_DELETE:
+			{
+				((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"删除");
+				break;
+			}
+		case  RECORD_RESPOND:
+			{
+				((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"应答");
+				break;
+			}
+		default:
+			{
+				OutputDebugString(L"Operation code error!\n");
+			}
+	}
+}
+
+void CLoggerDlg::OnBnClickedRadioDelete()
+{
+	SetOperation(RECORD_DELETE);
+}
+
+void CLoggerDlg::OnBnClickedRadioRespond()
+{
+	SetOperation(RECORD_RESPOND);
 }
