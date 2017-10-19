@@ -37,21 +37,22 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
-public:
-	afx_msg void OnBnClickedBtQuery();
+public:	
 	CComboBox m_ComboName;
 	CDateTimeCtrl m_DateTimeCtrl1;
 	CDateTimeCtrl m_DateTimeCtrl2;
 	CMonthCalCtrl m_MonthCalCtrl1;
 	CMonthCalCtrl m_MonthCalCtrl2;
 	CListCtrl m_ListCtrl;
+	RADIO_STATUS m_RadioStatus;
 
 private:
 	void InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn);
-	RADIO_STATUS GetRadioStatus();
-	void SetOperation(RADIO_STATUS status);
+//	RADIO_STATUS GetRadioStatus();
 public:
 	afx_msg void OnBnClickedRadio();
 	afx_msg void OnBnClickedRadioDelete();
 	afx_msg void OnBnClickedRadioRespond();
+	afx_msg void OnBnClickedBtOperation();
+	afx_msg void OnBnClickedBtQuery();
 };

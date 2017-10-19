@@ -5,6 +5,5 @@ class CLogDelete :	public CLogBase
 public:
 	CLogDelete(void);
 	~CLogDelete(void);
-	virtual bool DoSomething();
+	BOOL DoExcuteCmd();
 };
-

@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AdoSQL.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="DBOperate.h" />
     <ClInclude Include="LogBase.h" />
     <ClInclude Include="LogDelete.h" />
@@ -112,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AdoSQL.cpp" />
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="DBOperate.cpp" />
     <ClCompile Include="LogBase.cpp" />
     <ClCompile Include="LogDelete.cpp" />

@@ -41,8 +41,8 @@ void CAdoSql::InitialConn()
 		//3、再以记事本方式打开，第三行的数据就是连接字符
 
 		//m_bstrConn = "Provider=SQLNCLI10.1;Integrated Security="";Persist Security Info=False;User ID=sa;Password=123456;Initial Catalog=WORK;Data Source="";Initial File Name="";Server SPN=""";
-		//m_bstrConn = "Provider=SQLOLEDB;Integrated Security="";Persist Security Info=False;Initial Catalog=WORK;Data Source="";Initial File Name="";Server SPN=""";
-		m_bstrConn = "Provider=SQLOLEDB.1;Password=123456;Persist Security Info=True;User ID=sa;Initial Catalog=TestDB;Data Source=X6X8-20160219EX";
+		m_bstrConn = "Provider=SQLOLEDB.1;Password=123456;Persist Security Info=True;User ID=sa;Initial Catalog=TestDB;Data Source=127.0.0.1";
+		//m_bstrConn = "Provider=SQLOLEDB.1;Password=admin,123;Persist Security Info=True;User ID=sa;Initial Catalog=V8_MDJWD;Data Source=10.3.80.33";
 
 		hr = m_pConnection->Open(m_bstrConn, "", "", adModeUnknown);
 		if (!SUCCEEDED(hr)) {

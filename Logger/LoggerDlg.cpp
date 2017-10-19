@@ -47,14 +47,9 @@ void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CAboutDlg, CDialogEx)
 END_MESSAGE_MAP()
 
-
 // CLoggerDlg 对话框
-
-
-
-
 CLoggerDlg::CLoggerDlg(CWnd* pParent /*=NULL*/)
-	: CDialogEx(CLoggerDlg::IDD, pParent)
+	: CDialogEx(CLoggerDlg::IDD, pParent),m_RadioStatus(RECORD_DELETE)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -77,6 +72,7 @@ BEGIN_MESSAGE_MAP(CLoggerDlg, CDialogEx)
 	ON_BN_CLICKED(IDC_BT_QUERY, &CLoggerDlg::OnBnClickedBtQuery)
 	ON_BN_CLICKED(IDC_RADIO_DELETE, &CLoggerDlg::OnBnClickedRadioDelete)
 	ON_BN_CLICKED(IDC_RADIO_RESPOND, &CLoggerDlg::OnBnClickedRadioRespond)
+	ON_BN_CLICKED(IDC_BT_OPERATION, &CLoggerDlg::OnBnClickedBtOperation)
 END_MESSAGE_MAP()
 
 // CLoggerDlg 消息处理程序
@@ -110,10 +106,9 @@ BOOL CLoggerDlg::OnInitDialog()
 	SetIcon(m_hIcon, TRUE);			// 设置大图标
 	SetIcon(m_hIcon, FALSE);		// 设置小图标
 
-	// TODO: 在此添加额外的初始化代码
-	//added by zh.t
+	//added by zh.t start
 	m_ComboName.ResetContent();
-	m_ComboName.InsertString(0,L"空");
+	m_ComboName.InsertString(0,L"");
 	m_ComboName.InsertString(1,L"全部");
 	m_ComboName.InsertString(2,L"张施全");
 	m_ComboName.InsertString(3,L"黄勤智");
@@ -127,8 +122,11 @@ BOOL CLoggerDlg::OnInitDialog()
 	m_ComboName.SetCurSel(0);
 
 	//发送“删除”按钮按下的消息
-	PostMessage(WM_COMMAND, MAKEWPARAM(IDC_RADIO_DELETE, BN_CLICKED), NULL);  
+	PostMessage(WM_COMMAND, MAKEWPARAM(IDC_RADIO_DELETE, BN_CLICKED), NULL);
+
 	((CButton *)GetDlgItem(IDC_RADIO_DELETE))->SetCheck(TRUE);
+	((CButton *)GetDlgItem(IDC_BT_OPERATION))->EnableWindow(FALSE);
+	//added by zh.t end
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -183,15 +181,18 @@ HCURSOR CLoggerDlg::OnQueryDragIcon()
 }
 
 void CLoggerDlg::OnBnClickedBtQuery()
-{	
+{
+
+#if 0
 	//取得文本框字符的方法
-	/*CEdit* pBoxOne;
+	CEdit* pBoxOne;
 	pBoxOne = (CEdit*) GetDlgItem(IDC_EDIT_TEST);
 	CString str;
 	pBoxOne-> GetWindowText(str);
-	OutputDebugString(str + "\n");*/
+	OutputDebugString(str + "\n");
+#endif
 
-	CLogBase *pLogDelete = new CLogDelete();
+	CLogBase *pLogBase = new CLogBase();
 	CString strSQL;
 
 	//取得MonthCalCtrl日期
@@ -216,43 +217,58 @@ void CLoggerDlg::OnBnClickedBtQuery()
 	CString str_Time2 = tm.Format("%H:%M:%S");
 	OutputDebugString(str_Time1 + "\n");
 	OutputDebugString(str_Time2 + "\n");
-
+	
 	//combo
 	int nIndex;
 	CString str_Name;
 	nIndex = m_ComboName.GetCurSel();
 	m_ComboName.GetLBText(nIndex,str_Name);
-	OutputDebugString(str_Name + "\n");
+	OutputDebugString(str_Name + L"\n");
 
-	pLogDelete->SetDay1(str_Day1);
-	pLogDelete->SetDay2(str_Day2);
-	pLogDelete->SetTime1(str_Time1);
-	pLogDelete->SetTime2(str_Time2);
-	pLogDelete->SetName(str_Name);
-	pLogDelete->DoSomething();	
+	pLogBase->SetDay1(str_Day1);
+	pLogBase->SetDay2(str_Day2);
+	pLogBase->SetTime1(str_Time1);
+	pLogBase->SetTime2(str_Time2);
+	pLogBase->SetName(str_Name);
+	
+	if(!pLogBase->DoSearch())
+	{
+		return;
+	}	
 
 	vector < vector <CString> >::iterator it1;
 	vector <CString>::iterator it2;
-	vector < vector <CString> > vecList = pLogDelete->GetVecList();
-	/*for(it1=vecList.begin();it1!=vecList.end();++it1)
-	{
-	for(it2=it1->begin();it2!=it1->end();++it2)
-	{
-	OutputDebugString(*it2 + L" ");
-	}
-	OutputDebugString(L"\n");
-	}*/
+	vector < vector <CString> > vecList = pLogBase->GetVecList();
 
-	vector <CString> vecColumn = pLogDelete->GetVecColumn();
+#if 0
+	for(it1=vecList.begin();it1!=vecList.end();++it1)
+	{
+		for(it2=it1->begin();it2!=it1->end();++it2)
+		{
+			OutputDebugString(*it2 + L" ");
+		}
+		OutputDebugString(L"\n");
+	}
+#endif
+
+	vector <CString> vecColumn = pLogBase->GetVecColumn();
 
 	InitListCtrl(vecList,vecColumn);
 
-	delete pLogDelete;
-	pLogDelete = NULL;	
+	delete pLogBase;
+	pLogBase = NULL;
+	((CButton *)GetDlgItem(IDC_BT_OPERATION))->EnableWindow(TRUE);
 }
 
 void CLoggerDlg::InitListCtrl(vector < vector <CString> > vecList,vector <CString> vecColumn)
 {
+	m_ListCtrl.DeleteAllItems();
+	UINT nColumeNum = m_ListCtrl.GetHeaderCtrl()->GetItemCount();
+	for(UINT i=0;i<nColumeNum;++i)
+	{
+		m_ListCtrl.DeleteColumn(0);
+	}
+	
 	DWORD dwStyle = m_ListCtrl.GetExtendedStyle();     
 	dwStyle |= LVS_EX_FULLROWSELECT;
 	dwStyle |= LVS_EX_GRIDLINES;
@@ -279,6 +295,7 @@ void CLoggerDlg::InitListCtrl(vector < vector <CString> > vecList,vector <CStrin
 	}
 }
 
+#if 0
 CLoggerDlg::RADIO_STATUS CLoggerDlg::GetRadioStatus()
 {
 	BOOL bRadio = FALSE;
@@ -296,34 +313,45 @@ CLoggerDlg::RADIO_STATUS CLoggerDlg::GetRadioStatus()
 
 	return RECORD_DELETE;
 }
-
-void CLoggerDlg::SetOperation(RADIO_STATUS status)
-{
-	switch(status)
-	{
-		case RECORD_DELETE:
-			{
-				((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"删除");
-				break;
-			}
-		case  RECORD_RESPOND:
-			{
-				((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"应答");
-				break;
-			}
-		default:
-			{
-				OutputDebugString(L"Operation code error!\n");
-			}
-	}
-}
+#endif
 
 void CLoggerDlg::OnBnClickedRadioDelete()
 {
-	SetOperation(RECORD_DELETE);
+	((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"删除");
+	m_RadioStatus = RECORD_DELETE;
 }
 
 void CLoggerDlg::OnBnClickedRadioRespond()
 {
-	SetOperation(RECORD_RESPOND);
+	((CButton *)GetDlgItem(IDC_BT_OPERATION))->SetWindowTextW(L"应答");
+	m_RadioStatus = RECORD_RESPOND;
+}
+
+void CLoggerDlg::OnBnClickedBtOperation()
+{
+	CLogBase *pLogExcuteCmd = NULL;
+	switch(m_RadioStatus)
+	{
+		case RECORD_DELETE:
+			{
+				OutputDebugString(L"Operation delete!\n");
+				pLogExcuteCmd = new CLogDelete();				
+				break;
+			}
+		case RECORD_RESPOND:
+			{
+				OutputDebugString(L"Operation respond!\n");
+				break;
+			}
+		default:
+			{
+				OutputDebugString(L"Operation error!\n");
+				return ;
+			}
+	}
+
+	pLogExcuteCmd->DoExcuteCmd();
+	delete pLogExcuteCmd;
+	pLogExcuteCmd = NULL;
+	((CButton *)GetDlgItem(IDC_BT_OPERATION))->EnableWindow(FALSE);
 }
